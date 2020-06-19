@@ -50,7 +50,10 @@ class StdOutListener(StreamListener):
                     still_words = index <= len(text) - 1
                         #tweet's words    |    spaces      |   new word
                     if still_words and sum(list(map(len,tweet))) + len(tweet) + len(text[index]) <= MAX_LENGTH:
-                        tweet.append(text[index])   
+                        #prevent escaping sequence chars
+                        raw_s = r'{}'.format(text[index])
+                        print(raw_s)
+                        tweet.append(raw_s)   
                         index += 1
                     else:
                         ok = False
