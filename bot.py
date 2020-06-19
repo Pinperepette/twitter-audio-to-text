@@ -28,7 +28,7 @@ class StdOutListener(StreamListener):
                 tw_id = '0'
             
             if len(tw_id) != 0:
-                get_status(int(tw_id), us, tid)
+                get_status(int(tw_id), user_id, tid)
                 os.system('rm /Users/thepirate/Desktop/test.wav')
         except:
             pass
