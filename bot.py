@@ -15,7 +15,7 @@ class StdOutListener(StreamListener):
     def on_data(self, data):
         tw = json.loads(data)
         try:
-            us = tw['user']['screen_name']
+            user_id = tw['user']['screen_name']
             tid = tw['id']
             try:
                 tw_id = tw['quoted_status_id_str']
@@ -23,7 +23,7 @@ class StdOutListener(StreamListener):
                 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
                 auth.set_access_token(access_token, access_token_secret)
                 api = tweepy.API(auth) 
-                messaggio = '@'+ us + ' ' + 'qualcosa non cosa, riprova'
+                messaggio = '@'+ user_id + ' ' + 'qualcosa non cosa, riprova'
                 api.update_status(messaggio, in_reply_to_status_id = tid)
                 tw_id = '0'
             
@@ -35,6 +35,36 @@ class StdOutListener(StreamListener):
 
     def on_error(self, status):
         print(status)
+        
+    #Split plain text into an array of tweet's body (max 280 characters)    
+    def split_text_into_tweets(text):
+        MAX_LENGTH = 280
+        
+        if len(text) > MAX_LENGTH:
+            result, index = [],0
+            text = text.split()
+            while index < len(text):
+                tweet = []
+                ok = True
+                while ok:
+                    still_words = index <= len(text) - 1
+                        #tweet's words    |    spaces      |   new word
+                    if still_words and sum(list(map(len,tweet))) + len(tweet) + len(text[index]) <= MAX_LENGTH:
+                        #prevent escaping sequence chars
+                        raw_s = r'{}'.format(text[index])
+                        print(raw_s)
+                        tweet.append(raw_s)   
+                        index += 1
+                    else:
+                        ok = False
+                #append tweet to result
+                tweet = ' '.join(tweet)
+                result.append(tweet)
+                
+            return result
+                
+        else:
+            return [text]
 
 if __name__ == '__main__':
 
