@@ -35,30 +35,14 @@ class StdOutListener(StreamListener):
 
     def on_error(self, status):
         print(status)
-    
-    '''    
-    #Split plain text into an array of tweet's corpus (max 280 characters)    
-    def split_text_into_tweets2(text):
-        MAX_LENGTH = 280
-        
-        if len(text) > MAX_LENGTH:
-            result = []
-            while len(text) > MAX_LENGTH and len(text.strip()) > 0 :
-                result.append(text[:MAX_LENGTH])
-                text = text[MAX_LENGTH:]
-            return result
-        else:
-            return [text]
-    '''
         
     #Split plain text into an array of tweet's body (max 280 characters)    
     def split_text_into_tweets(text):
         MAX_LENGTH = 280
         
         if len(text) > MAX_LENGTH:
-            result = []
+            result, index = [],0
             text = text.split()
-            index = 0
             while index < len(text):
                 tweet = []
                 ok = True
